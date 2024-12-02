@@ -1,0 +1,18 @@
+<mat-card>
+    <mat-card-title>Statystyki sieci transportowej</mat-card-title>
+    <mat-card-content>
+      <div *ngIf="error" class="error-message">
+        {{ error }}
+      </div>
+      <div *ngIf="stats">
+        <h3>Ogólne statystyki:</h3>
+        <ul>
+          <li><strong>Liczba miast:</strong> {{ stats.totalCities }}</li>
+          <li><strong>Liczba połączeń:</strong> {{ stats.totalConnections }}</li>
+          <li><strong>Najdłuższe połączenie:</strong> {{ stats.longestConnection?.distance }} km ({{ stats.longestConnection?.from }} → {{ stats.longestConnection?.to }})</li>
+          <li><strong>Najkrótsze połączenie:</strong> {{ stats.shortestConnection?.distance }} km ({{ stats.shortestConnection?.from }} → {{ stats.shortestConnection?.to }})</li>
+        </ul>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  

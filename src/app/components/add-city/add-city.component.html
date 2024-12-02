@@ -1,0 +1,23 @@
+<mat-card>
+    <mat-card-title>Dodaj nowe miasto</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="cityForm" (ngSubmit)="addCity()">
+        <mat-label>Nazwa miasta</mat-label>
+        <mat-form-field appearance="outline" class="full-width">
+          
+          <input matInput placeholder="Wprowadź nazwę miasta" formControlName="name" required />
+          <mat-error *ngIf="cityForm.get('name')?.hasError('required')">Nazwa miasta jest wymagana</mat-error>
+        </mat-form-field>
+        <mat-label>Populacja</mat-label>
+        <mat-form-field appearance="outline" class="full-width">
+          
+          <input matInput type="number" placeholder="Wprowadź populację" formControlName="population" required />
+          <mat-error *ngIf="cityForm.get('population')?.hasError('required')">Populacja jest wymagana</mat-error>
+          <mat-error *ngIf="cityForm.get('population')?.hasError('min')">Populacja musi być większa niż 0</mat-error>
+        </mat-form-field>
+  
+        <button mat-raised-button color="primary" type="submit">Dodaj</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  

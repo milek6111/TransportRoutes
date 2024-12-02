@@ -1,0 +1,61 @@
+<mat-card>
+    <mat-card-title>Dodaj połączenie</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="connectionForm" (ngSubmit)="addConnection()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Miasto początkowe</mat-label>
+          <mat-select formControlName="fromCity" required>
+            <mat-option *ngFor="let city of cities" [value]="city">
+              {{ city }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Miasto docelowe</mat-label>
+          <mat-select formControlName="toCity" required>
+            <mat-option *ngFor="let city of cities" [value]="city">
+              {{ city }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Typ transportu</mat-label>
+          <mat-select formControlName="transportType" required>
+            <mat-option *ngFor="let type of transportTypes" [value]="type">
+              {{ type }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Dystans (km)</mat-label>
+          <input matInput formControlName="distance" type="number" placeholder="Wprowadź dystans" />
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Czas podróży (godziny)</mat-label>
+          <input matInput formControlName="travelTime" type="number" placeholder="Wprowadź czas podróży" />
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Czas lotu (godziny)</mat-label>
+          <input matInput formControlName="flightTime" type="number" placeholder="Wprowadź czas lotu" />
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Koszt ($)</mat-label>
+          <input matInput formControlName="cost" type="number" placeholder="Wprowadź koszt" />
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Linia lotnicza</mat-label>
+          <input matInput formControlName="airline" placeholder="Wprowadź nazwę linii lotniczej" />
+        </mat-form-field>
+  
+        <button mat-raised-button color="primary" type="submit">Dodaj połączenie</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  

@@ -1,0 +1,44 @@
+/* Ogólne style dla mat-card */
+mat-card {
+    max-width: 500px;
+    margin: 20px auto; /* Wyśrodkowanie karty na stronie */
+    padding: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Dodanie lekkiego cienia */
+    border-radius: 8px;
+  }
+  
+  mat-card-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  
+  mat-card-content {
+    padding: 16px;
+  }
+  
+  mat-form-field {
+    width: 100%;
+    margin-bottom: 16px; /* Odstęp między polami formularza */
+  }
+  
+  button {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1em;
+    text-align: center;
+  }
+  
+  .full-width {
+    width: 100%;
+  }
+  
+  mat-form-field .mat-label {
+    font-size: 1.1em; /* Zwiększenie czcionki etykiety */
+  }
+  
+  input.mat-input-element {
+    font-size: 1.1em; /* Zwiększenie czcionki w polu tekstowym */
+  }
+  

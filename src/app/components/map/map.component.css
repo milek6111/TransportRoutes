@@ -1,0 +1,30 @@
+.graph-container {
+    display: flex;
+    justify-content: center;  /* Wyśrodkowanie grafu poziomo */
+    align-items: center;      /* Wyśrodkowanie grafu pionowo */
+    width: 100%;
+    height: 500px;
+    border: 1px solid #ddd;
+    background-color: #f0f0f0;
+  }
+  
+  mat-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Wyrównanie zawartości mat-card w pionie */
+    align-items: center;     /* Wyrównanie zawartości mat-card w poziomie */
+    height: 100%;
+  }
+  
+  mat-card-title {
+    text-align: center;  /* Wyśrodkowanie tytułu */
+  }
+  
+  mat-card-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
+  

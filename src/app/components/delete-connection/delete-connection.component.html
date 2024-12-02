@@ -1,0 +1,27 @@
+<mat-card>
+    <mat-card-title>Usuń połączenie</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="deleteConnectionForm" (ngSubmit)="deleteConnection()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Miasto początkowe</mat-label>
+          <mat-select formControlName="fromCity" required>
+            <mat-option *ngFor="let city of cities" [value]="city">
+              {{ city }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Miasto docelowe</mat-label>
+          <mat-select formControlName="toCity" required>
+            <mat-option *ngFor="let city of cities" [value]="city">
+              {{ city }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+  
+        <button mat-raised-button color="warn" type="submit">Usuń połączenie</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  

@@ -1,0 +1,42 @@
+/* Styl dla całej zawartości, aby było to wyśrodkowane i dobrze rozmieszczone */
+.main-container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  mat-toolbar {
+    position: fixed;
+    z-index: 2;
+    width: 100%;
+    text-align: center;
+    padding: 16px 0;
+  }
+  
+  .content {
+    margin: 80px 16px 16px 16px; /* Odstęp od paska narzędzi */
+  }
+  
+  /* Sidenav stylizacja */
+  mat-sidenav {
+    width: 250px;
+    background: #f5f5f5;
+  }
+  
+  /* Kontener przycisków nawigacyjnych */
+  .nav-list {
+    display: flex;
+    flex-direction: column;  /* Ustawienie przycisków w pionie */
+    gap: 16px;  /* Odstęp między przyciskami */
+    padding: 16px;
+  }
+  
+  button.mat-button {
+    width: 100%;  /* Przyciski będą miały pełną szerokość */
+    padding: 12px;  /* Wysokość przycisków */
+    font-size: 16px;  /* Rozmiar czcionki przycisków */
+  }
+  
+  button.mat-button:hover {
+    background-color: #e0e0e0; /* Efekt hover */
+  }
+  

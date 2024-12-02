@@ -1,0 +1,18 @@
+<mat-card>
+    <mat-card-title>Usuń miasto</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="deleteForm" (ngSubmit)="deleteNode()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Wybierz miasto</mat-label>
+          <mat-select formControlName="cityName" required>
+            <mat-option *ngFor="let city of cities" [value]="city">
+              {{ city }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+  
+        <button mat-raised-button color="warn" type="submit">Usuń miasto</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  
