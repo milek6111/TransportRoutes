@@ -1,44 +1,38 @@
 <mat-card>
-    <mat-card-title>Wyszukiwanie połączeń</mat-card-title>
-    <mat-card-content>
-      <form (ngSubmit)="search()">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Miasto początkowe</mat-label>
-          <mat-select [(ngModel)]="city1" name="city1" required>
-            <mat-option *ngFor="let city of cities" [value]="city">
-              {{ city }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-  
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Miasto docelowe</mat-label>
-          <mat-select [(ngModel)]="city2" name="city2" required>
-            <mat-option *ngFor="let city of cities" [value]="city">
-              {{ city }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-  
-        <button mat-raised-button color="primary" type="submit">🔍 Szukaj</button>
-      </form>
-    </mat-card-content>
-  
-    <!-- Wyświetlanie wyników -->
-    <mat-card-content *ngIf="connections && connections.length > 0">
-      <div *ngFor="let connection of connections" class="connection-result">
-        <p><strong>Miasto początkowe:</strong> {{ connection.fromCity }}</p>
-        <p><strong>Miasto końcowe:</strong> {{ connection.toCity }}</p>
-        <p><strong>Typ transportu:</strong> {{ connection.transportType }}</p>
-        <p *ngIf="connection.distance"><strong>Dystans:</strong> {{ connection.distance }} km</p>
-        <p *ngIf="connection.travelTime"><strong>Czas podróży:</strong> {{ connection.travelTime }} hours</p>
-        <hr />
-      </div>
-    </mat-card-content>
-  
-    <!-- Gdy brak wyników -->
-    <mat-card-content *ngIf="connections && connections.length === 0">
-      <p>Nie znaleziono połączeń.</p>
-    </mat-card-content>
-  </mat-card>
-  
+  <mat-card-title>Wyszukiwanie połączeń</mat-card-title>
+  <mat-card-content>
+    <form (ngSubmit)="search()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Miasto początkowe</mat-label>
+        <mat-select [(ngModel)]="city1" name="city1" required>
+          <mat-option *ngFor="let city of cities" [value]="city">{{ city }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Miasto docelowe</mat-label>
+        <mat-select [(ngModel)]="city2" name="city2" required>
+          <mat-option *ngFor="let city of cities" [value]="city">{{ city }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit">🔍 Szukaj</button>
+    </form>
+  </mat-card-content>
+
+  <!-- Wyświetlanie wyników -->
+  <mat-card-content *ngIf="connections && connections.length > 0">
+    <h3>Najkrótsze połączenia:</h3>
+    <div *ngFor="let connection of connections" class="connection-result">
+      <p><strong>Ścieżka:</strong> {{ connection.cities.join(' → ') }}</p>
+      <p><strong>Typy transportu:</strong> {{ connection.transportTypes.join(', ') }}</p>
+      <p><strong>Całkowity dystans:</strong> {{ connection.totalDistance }} km</p>
+      <hr />
+    </div>
+  </mat-card-content>
+
+  <!-- Gdy brak wyników -->
+  <mat-card-content *ngIf="connections && connections.length === 0">
+    <p>Nie znaleziono połączeń.</p>
+  </mat-card-content>
+</mat-card>

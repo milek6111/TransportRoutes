@@ -15,11 +15,14 @@ export class StatsComponent {
   stats: any = null;
   error: string | null = null;
 
+
   constructor(private neo4jService: Neo4jService) {}
 
   async ngOnInit(): Promise<void> {
     try {
       this.stats = await this.neo4jService.fetchStats();
+
+      this.stats.totalConnections = Number(this.stats.totalConnections)/2;
     } catch (err) {
       console.error('Error fetching stats:', err);
       this.error = 'Wystąpił problem podczas pobierania statystyk.';

@@ -18,7 +18,7 @@ import { CommonModule } from '@angular/common';
 export class AddConnectionComponent implements OnInit {
   connectionForm: FormGroup;
   cities: string[] = [];
-  transportTypes = ['KOMUNIKACJA_DROGOWA', 'LOTY', 'TRASA_MORSKA'];
+  transportTypes = ['DROGA', 'LOT', 'MORSKA'];
 
   constructor(private fb: FormBuilder, private neo4jService: Neo4jService) {
     this.connectionForm = this.fb.group({
@@ -26,10 +26,7 @@ export class AddConnectionComponent implements OnInit {
       toCity: ['', Validators.required],
       transportType: ['', Validators.required],
       distance: [null, Validators.min(0)],
-      travelTime: [null, Validators.min(0)],
-      flightTime: [null, Validators.min(0)],
-      cost: [null, Validators.min(0)],
-      airline: [''],
+      travelTime: [null, Validators.min(0)]
     });
   }
 

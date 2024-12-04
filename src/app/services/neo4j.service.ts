@@ -13,7 +13,6 @@ export class Neo4jService {
       neo4j.auth.basic('neo4j', 'viJH9xevDJX41aTOzoeaNy14v05NMIlBgi8pmu-zgtU') 
     );
   }
-
   async runQuery(query: string, params: Record<string, any> = {}): Promise<any[]> {
     const session: Session = this.driver.session();
     try {
@@ -25,29 +24,42 @@ export class Neo4jService {
   }
 
   async searchConnections(city1: string, city2: string): Promise<any[]> {
-    // Cypher query to search for connections between two cities
     const query = `
-      MATCH (c1:Miasto {nazwa: $city1})-[
-        r:KOMUNIKACJA_DROGOWA|LOTY|TRASA_MORSKA
-      ]->(c2:Miasto {nazwa: $city2})
-      RETURN c1.nazwa AS fromCity, c2.nazwa AS toCity, 
-             type(r) AS transportType, 
-             r.dystans AS distance, 
-             r.czas_przejazdu AS travelTime, 
-             r.czas_lotu AS flightTime, 
-             r.koszt AS cost, 
-             r.linia_lotnicza AS airline
+      MATCH path = (c1:Miasto {nazwa: $city1})-[*..3]->(c2:Miasto {nazwa: $city2})
+      WHERE ALL(node IN nodes(path)[1..-1] WHERE single(n IN nodes(path) WHERE n = node))
+      WITH path, 
+           reduce(totalDist = 0, r IN relationships(path) | totalDist + coalesce(r.dystans, 0)) AS totalDistance
+      ORDER BY totalDistance ASC
+      LIMIT 3
+      RETURN 
+        [n IN nodes(path) | n.nazwa] AS cities, 
+        [r IN relationships(path) | type(r)] AS transportTypes,
+        totalDistance
     `;
-    
-    // Parameters for the query
+  
     const params = {
       city1: city1,
       city2: city2
     };
   
-    // Run the query and return the result
-    return this.runQuery(query, params);
+    const session = this.driver.session();
+  
+    try {
+      const result = await session.run(query, params);
+      return result.records.map(record => ({
+        cities: record.get('cities'),
+        transportTypes: record.get('transportTypes'),
+        totalDistance: record.get('totalDistance'),
+      }));
+    } catch (error) {
+      console.error('Error fetching connections:', error);
+      throw new Error('Failed to fetch connections.');
+    } finally {
+      await session.close();
+    }
   }
+  
+  
 
   async fetchCitiesAndConnections(): Promise<any[]> {
     const query = `
@@ -63,11 +75,11 @@ export class Neo4jService {
              c1.nazwa AS city1,
              CASE WHEN c2 IS NULL THEN null ELSE c2.nazwa END AS city2,
              COALESCE(r.dystans, 0) AS distance,
-             COALESCE(r.czas_przejazdu, 0) AS travelTime,
+             COALESCE(r.czas, 0) AS travelTime,
              CASE 
-               WHEN relationshipType = 'KOMUNIKACJA_DROGOWA' THEN 'Road'
-               WHEN relationshipType = 'LOTY' THEN 'Air'
-               WHEN relationshipType = 'TRASA_MORSKA' THEN 'Sea'
+               WHEN relationshipType = 'DROGA' THEN 'Road'
+               WHEN relationshipType = 'LOT' THEN 'Air'
+               WHEN relationshipType = 'MORSKA' THEN 'Sea'
                ELSE 'Unknown'
              END AS transportType
     `;
@@ -106,19 +118,16 @@ export class Neo4jService {
   }
   
   
-  async addCity(cityData: { nazwa: string; populacja: number }): Promise<void> {
+  async addCity(cityData: { nazwa: string}): Promise<void> {
     const session: Session = this.driver.session();
     const query = `
-      MERGE (m:Miasto {nazwa: $nazwa})
-      ON CREATE SET m.populacja = $populacja
-      ON MATCH SET m.populacja = m.populacja // Opcjonalnie zachowanie dotychczasowej populacji
-      RETURN m
-    `;
+    MERGE (m:Miasto {nazwa: $nazwa})
+    RETURN m
+  `;
     
     try {
       const result = await session.run(query, {
-        nazwa: cityData.nazwa,
-        populacja: cityData.populacja,
+        nazwa: cityData.nazwa
       });
 
       if (result.records.length > 0) {
@@ -151,6 +160,9 @@ export class Neo4jService {
     const query = `
       MATCH (m1:Miasto {nazwa: $fromCity})-[r]->(m2:Miasto {nazwa: $toCity})
       DELETE r
+      WITH m1, m2
+      MATCH (m2)-[r]->(m1)
+      DELETE r
     `;
     try {
       await this.runQuery(query, { fromCity, toCity });
@@ -159,17 +171,21 @@ export class Neo4jService {
       throw error;
     }
   }
+  
 
   async addConnection(data: any): Promise<void> {
     const query = `
       MATCH (from:Miasto {nazwa: $fromCity}), (to:Miasto {nazwa: $toCity})
-      CREATE (from)-[r:${data.transportType} {
+      MERGE (from)-[r1:${data.transportType} {
         dystans: $distance,
-        czas_przejazdu: $travelTime,
-        czas_lotu: $flightTime,
-        koszt: $cost,
-        linia_lotnicza: $airline
+        czas: $travelTime,
+        transport: $transportType
       }]->(to)
+      MERGE (to)-[r2:${data.transportType} {
+        dystans: $distance,
+        czas: $travelTime,
+        transport: $transportType
+      }]->(from)
     `;
     try {
       console.log(data);
@@ -178,15 +194,14 @@ export class Neo4jService {
         toCity: data.toCity,
         distance: data.distance || null,
         travelTime: data.travelTime || null,
-        flightTime: data.flightTime || null,
-        cost: data.cost || null,
-        airline: data.airline || null,
+        transportType: data.transportType || 'unknown',
       });
     } catch (error) {
       console.error('Error adding connection:', error);
       throw error;
     }
   }
+  
   
   async fetchCities(): Promise<string[]> {
     const query = `

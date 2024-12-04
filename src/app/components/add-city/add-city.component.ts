@@ -20,15 +20,13 @@ export class AddCityComponent {
   constructor(private fb: FormBuilder, private neo4jService: Neo4jService) {
     this.cityForm = this.fb.group({
       name: ['', Validators.required],
-      population: ['', [Validators.required, Validators.min(1)]],
     });
   }
 
   addCity(): void {
     if (this.cityForm.valid) {
       const cityData = {
-        nazwa: this.cityForm.value.name,
-        populacja: this.cityForm.value.population,
+        nazwa: this.cityForm.value.name
       };
   
       this.neo4jService

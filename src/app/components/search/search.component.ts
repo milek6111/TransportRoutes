@@ -41,9 +41,11 @@ export class SearchComponent implements OnInit {
         this.connections = await this.neo4jService.searchConnections(this.city1, this.city2);
       } catch (error) {
         console.error('Błąd podczas wyszukiwania połączeń:', error);
+        alert('Wystąpił błąd podczas wyszukiwania połączeń.');
       }
     } else {
       alert('Proszę wybrać oba miasta.');
     }
   }
+  
 }
